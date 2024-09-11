@@ -6,7 +6,5 @@ commands = [
 [phases.build]
 commands = []
 
-[phases.start]
-commands = [
-  "python app.py"
-]
+[start]
+cmd = 'python app.py'
