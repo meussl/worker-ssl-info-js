@@ -11,7 +11,7 @@ def ssl_info():
         return jsonify({'error': 'Domain parameter is required'}), 400
 
     try:
-        response = requests.get(f'https://{domain}', timeout=5)
+        response = requests.get('https://{}'.format(domain), timeout=5)
         ssl_info = response.raw.connection.sock.getpeercert()
         return jsonify({
             'domain': domain,
