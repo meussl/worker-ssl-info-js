@@ -14,7 +14,7 @@ app.get('/ssl-info', (req, res) => {
         method: 'GET'
     };
 
-    const req = https.request(options, (response) => {
+    const request = https.request(options, (response) => {
         const certificate = response.socket.getPeerCertificate();
         if (!certificate || Object.keys(certificate).length === 0) {
             return res.status(500).json({ error: 'No certificate found' });
@@ -27,11 +27,11 @@ app.get('/ssl-info', (req, res) => {
         });
     });
 
-    req.on('error', (e) => {
+    request.on('error', (e) => {
         res.status(500).json({ error: 'Request error', details: e.message });
     });
 
-    req.end();
+    request.end();
 });
 
 const PORT = process.env.PORT || 8000;
