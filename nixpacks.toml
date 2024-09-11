@@ -6,7 +6,6 @@ aptPkgs = ["wget", "curl", "python2", "python-pip", "libpq-dev", "python2-dev"]
 
 [phases.build]
 commands = [
-  "pip install --upgrade build setuptools",
   "pip install -r requirements.txt"
 ]
 
