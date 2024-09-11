@@ -2,7 +2,7 @@
 commands = [
   ""
 ]
-aptPkgs = ["wget", "curl", "python", "python-pip", "python-is-python2", "libpq-dev", "python-dev"]
+aptPkgs = ["wget", "curl", "python", "python-pip", "libpq-dev", "python-dev"]
 
 [phases.build]
 commands = [
