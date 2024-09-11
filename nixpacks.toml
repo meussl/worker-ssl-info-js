@@ -2,12 +2,12 @@
 commands = [
   ""
 ]
-aptPkgs = ["wget", "curl", "python2", "python-pip", "libpq-dev", "python2-dev"]
+aptPkgs = ["wget", "curl", "nodejs", "npm"]
 
 [phases.build]
 commands = [
-  "pip install -r requirements.txt"
+  "npm install"
 ]
 
 [start]
-cmd = 'python2 app.py'
+cmd = 'node app.js'

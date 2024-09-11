@@ -1,0 +1,12 @@
+{
+  "name": "ssl-info",
+  "version": "1.0.0",
+  "description": "A Node.js app to fetch SSL information of a domain",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
