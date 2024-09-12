@@ -1,37 +1,24 @@
 const express = require('express');
 const https = require('https');
+const sslChecker = require('./sslChecker'); // Correctly import the sslChecker function
 const app = express();
 
-app.get('/ssl-info', (req, res) => {
+app.get('/ssl-info', async (req, res) => { // Make the handler function async
     const domain = req.query.domain;
     if (!domain) {
         return res.status(400).json({ error: 'Domain parameter is required' });
     }
 
-    const options = {
-        hostname: domain,
-        port: 443,
-        method: 'GET'
-    };
-
-    const request = https.request(options, (response) => {
-        const certificate = response.socket.getPeerCertificate();
-        if (!certificate || Object.keys(certificate).length === 0) {
-            return res.status(500).json({ error: 'No certificate found' });
-        }
-
+    try {
+        const sslInfo = await sslChecker(domain); // Await the sslChecker function
         res.json({
             domain: domain,
-            ssl_info: certificate,
-            status: response.statusCode === 200 ? 'valid' : 'invalid'
+            ssl_info: sslInfo,
+            status: sslInfo.valid ? 'valid' : 'invalid'
         });
-    });
-
-    request.on('error', (e) => {
-        res.status(500).json({ error: 'Request error', details: e.message });
-    });
-
-    request.end();
+    } catch (error) {
+        res.status(500).json({ error: 'Request error', details: error.message });
+    }
 });
 
 const PORT = process.env.PORT || 8000;
