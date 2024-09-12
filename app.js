@@ -10,11 +10,13 @@ app.get('/ssl-info', async (req, res) => { // Make the handler function async
     }
 
     try {
-        const sslInfo = await sslChecker(domain); // Await the sslChecker function
+        const sslInfo = await sslChecker(domain, {validateSubjectAltName: true}); // Await the sslChecker function
         res.json({
             domain: domain,
-            ssl_info: sslInfo,
-            status: sslInfo.valid ? 'valid' : 'invalid'
+            sslInfo: sslInfo,
+            status: sslInfo.valid ? 'valid' : 'invalid',
+            requestTime: new Date().toISOString(),
+            requestEpoch: Date.now()
         });
     } catch (error) {
         res.status(500).json({ error: 'Request error', details: error.message });

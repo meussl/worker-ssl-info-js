@@ -24,8 +24,37 @@ const DEFAULT_OPTIONS = {
   method: "HEAD",
   port: 443,
   rejectUnauthorized: false,
-  validateSubjectAltName: false
+  validateSubjectAltName: true
 };
+
+// Propriedades Detalhadas
+// subject: Um objeto contendo informações sobre o sujeito do certificado.
+
+// CN: Nome comum.
+// O: Organização.
+// OU: Unidade organizacional.
+// L: Localidade.
+// ST: Estado ou província.
+// C: País.
+// issuer: Um objeto contendo informações sobre a entidade emissora do certificado.
+
+// CN: Nome comum.
+// O: Organização.
+// OU: Unidade organizacional.
+// L: Localidade.
+// ST: Estado ou província.
+// C: País.
+// valid_from: Uma string representando a data de início da validade do certificado.
+
+// valid_to: Uma string representando a data de término da validade do certificado.
+
+// fingerprint: Uma string representando a impressão digital do certificado.
+
+// serialNumber: Uma string representando o número de série do certificado.
+
+// raw: Um buffer contendo o certificado em formato binário.
+
+// Essas são algumas das propriedades mais comuns que você pode acessar no objeto retornado por getPeerCertificate.
 
 const sslChecker = (host, options = {}) =>
   new Promise((resolve, reject) => {
@@ -41,7 +70,7 @@ const sslChecker = (host, options = {}) =>
         const req = https.request(
           { host, ...options },
           (res) => {
-            let { valid_from, valid_to, subjectaltname } = res.socket.getPeerCertificate();
+            let { valid_from, valid_to, subjectaltname, issuer, subject } = res.socket.getPeerCertificate();
             res.socket.destroy();
 
             if (!valid_from || !valid_to || !subjectaltname) {
@@ -55,6 +84,9 @@ const sslChecker = (host, options = {}) =>
               .split(", ");
 
             resolve({
+              issuer: issuer.O,
+              commonName: issuer.CN,
+              subject: subject,
               daysRemaining: getDaysRemaining(new Date(), validTo),
               valid: res.socket.authorized || false,
               validFrom: new Date(valid_from).toISOString(),
