@@ -70,7 +70,7 @@ const sslChecker = (host, options = {}) =>
         const req = https.request(
           { host, ...options },
           (res) => {
-            let { valid_from, valid_to, subjectaltname, issuer, subject } = res.socket.getPeerCertificate();
+            let { valid_from, valid_to, subjectaltname, issuer, subject, fingerprint, serialNumber } = res.socket.getPeerCertificate();
             res.socket.destroy();
 
             if (!valid_from || !valid_to || !subjectaltname) {
@@ -84,7 +84,14 @@ const sslChecker = (host, options = {}) =>
               .split(", ");
 
             resolve({
-              issuer: issuer.O,
+              issuer: {
+                commonName: issuer.CN,
+                organization: issuer.O,
+                organizationalUnit: issuer.OU,
+                locality: issuer.L,
+                state: issuer.ST,
+                country: issuer.C
+              },
               commonName: issuer.CN,
               subject: subject,
               daysRemaining: getDaysRemaining(new Date(), validTo),
@@ -92,6 +99,8 @@ const sslChecker = (host, options = {}) =>
               validFrom: new Date(valid_from).toISOString(),
               validTo: validTo.toISOString(),
               validFor,
+              fingerprint: fingerprint,
+              serialNumber: serialNumber
             });
           }
         );
