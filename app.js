@@ -5,7 +5,6 @@ const issuers = require('./issuers'); // Import the issuers data
 const app = express();
 const { exec } = require('child_process');
 const fs = require('fs');
-// const forge = require('node-forge');
 const { Certificate } = require('@fidm/x509');
 
 
@@ -53,22 +52,16 @@ app.get('/ssl-info', async (req, res) => { // Make the handler function async
     try {
         const sslInfo = await sslChecker(domain, {validateSubjectAltName: true}); // Await the sslChecker function
         const issuerCN = sslInfo.commonName;
-        const issuerInfo = issuers[issuerCN] || { name: 'Unknown', url: '', logo: '' };
+        
         res.json({
             domain: domain,
             status: sslInfo.valid ? 'valid' : 'invalid',
             sslInfo: sslInfo,
-            issuer: {
-                CN: issuerCN,
-                name: issuerInfo.name,
-                url: issuerInfo.url,
-                logo: issuerInfo.logo
-            },
             requestTime: new Date().toISOString(),
             requestEpoch: Date.now()
         });
     } catch (error) {
-        res.status(500).json({ error: 'Request error', details: error.message });
+        res.status(500).json({ error: 'Request error', message: error.message });
     }
 });
 
