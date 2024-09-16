@@ -4,10 +4,14 @@
   "description": "A Node.js app to fetch SSL information of a domain",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon --watch server --inspect ./app.js"
   },
   "dependencies": {
     "@fidm/x509": "^1.2.1",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
