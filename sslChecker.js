@@ -69,7 +69,7 @@ const sslChecker = (host, options = {}) =>
         const req = https.request(
           { host, ...options },
           (res) => {
-            let { valid_from, valid_to, subjectaltname, issuer, subject, fingerprint, serialNumber } = res.socket.getPeerCertificate();
+            let { valid_from, valid_to, subjectaltname, issuer, subject, fingerprint256, serialNumber } = res.socket.getPeerCertificate();
             res.socket.destroy();
 
             if (!valid_from || !valid_to || !subjectaltname) {
@@ -98,7 +98,7 @@ const sslChecker = (host, options = {}) =>
               validFrom: new Date(valid_from).toISOString(),
               validTo: validTo.toISOString(),
               validFor,
-              fingerprint: fingerprint,
+              fingerprint256: fingerprint256,
               serialNumber: serialNumber
             });
           }
