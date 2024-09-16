@@ -82,25 +82,28 @@ const sslChecker = (host, options = {}) =>
               .replace(/DNS:|IP Address:/g, "")
               .split(", ");
 
-            resolve({
-              issuer: {
+              const issuerInfo = {
                 commonName: issuer.CN,
                 organization: issuer.O,
                 organizationalUnit: issuer.OU,
                 locality: issuer.L,
                 state: issuer.ST,
                 country: issuer.C
-              },
-              commonName: issuer.CN,
-              subject: subject,
-              daysRemaining: getDaysRemaining(new Date(), validTo),
-              valid: res.socket.authorized || false,
-              validFrom: new Date(valid_from).toISOString(),
-              validTo: validTo.toISOString(),
-              validFor,
-              fingerprint256: fingerprint256,
-              serialNumber: serialNumber
-            });
+              };
+
+              const sslInfo = {
+                commonName: issuer.CN,
+                subject: subject,
+                daysRemaining: getDaysRemaining(new Date(), validTo),
+                valid: res.socket.authorized || false,
+                validFrom: new Date(valid_from).toISOString(),
+                validTo: validTo.toISOString(),
+                validFor,
+                fingerprint256: fingerprint256,
+                serialNumber: serialNumber
+              };
+  
+              resolve({ issuer: issuerInfo, ssl: sslInfo });
           }
         );
 
