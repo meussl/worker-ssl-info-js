@@ -50,13 +50,14 @@ app.get('/ssl-info', async (req, res) => { // Make the handler function async
     }
 
     try {
-        const sslInfo = await sslChecker(domain, {validateSubjectAltName: true}); // Await the sslChecker function
-        const issuerCN = sslInfo.commonName;
+        const {ssl, issuer} = await sslChecker(domain, {validateSubjectAltName: true}); // Await the sslChecker function
+        
         
         res.json({
             domain: domain,
-            status: sslInfo.valid ? 'valid' : 'invalid',
-            sslInfo: sslInfo,
+            status: ssl.valid ? 'valid' : 'invalid',
+            ssl: ssl,
+            issuer: issuer,
             requestTime: new Date().toISOString(),
             requestEpoch: Date.now()
         });
@@ -66,12 +67,14 @@ app.get('/ssl-info', async (req, res) => { // Make the handler function async
 });
 
 app.get('/issuers', (req, res) => {
+    res.set('Cache-Control', 'public, max-age=3600'); // Set cache headers
     res.json(issuers);
 });
 
 app.get('/root-certificates', async (req, res) => {
     try {
         const certs = await getRootCertificates();
+        res.set('Cache-Control', 'public, max-age=3600'); // Set cache headers
         res.json(certs);
     } catch (error) {
         res.status(500).json({ error: error.message });
