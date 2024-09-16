@@ -37,4 +37,4 @@ function getRootCertificates() {
     });
 }
 
-export default getRootCertificates;
+module.exports = getRootCertificates;
