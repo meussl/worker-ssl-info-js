@@ -66,7 +66,6 @@ const sslChecker = (host, options = {}) =>
     }
 
     try {
-      if (options.validateSubjectAltName) {
         const req = https.request(
           { host, ...options },
           (res) => {
@@ -111,35 +110,6 @@ const sslChecker = (host, options = {}) =>
           reject(new Error("Timed Out"));
         });
         req.end();
-      } else {
-        const req = https.request(
-          { host, ...options },
-          (res) => {
-            let { valid_from, valid_to } = res.socket.getPeerCertificate();
-            res.socket.destroy();
-
-            if (!valid_from || !valid_to) {
-              reject(new Error("No certificate"));
-              return;
-            }
-
-            const validTo = new Date(valid_to);
-
-            resolve({
-              daysRemaining: getDaysRemaining(new Date(), validTo),
-              valid: res.socket.authorized || false,
-              validFrom: new Date(valid_from).toISOString(),
-              validTo: validTo.toISOString()
-            });
-          }
-        );
-        req.on("error", reject);
-        req.on("timeout", () => {
-          req.destroy();
-          reject(new Error("Timed Out"));
-        });
-        req.end();
-      }
     } catch (e) {
       reject(e);
     }
