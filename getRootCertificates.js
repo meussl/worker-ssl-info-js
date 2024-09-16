@@ -1,6 +1,6 @@
-import {exec} from "child_process";
-import fs from "fs";
-import {Certificate} from "@fidm/x509";
+const { exec } = require("child_process");
+const fs = require("fs");
+const { Certificate } = require("@fidm/x509");
 
 function getRootCertificates() {
     return new Promise((resolve, reject) => {
