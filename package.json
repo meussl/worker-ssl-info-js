@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon --watch server --inspect ./app.js"
+    "dev": "nodemon --watch . --inspect ./app.js"
   },
   "dependencies": {
     "@fidm/x509": "^1.2.1",
