@@ -1,10 +1,7 @@
-[phases.setup]
-commands = [
-  ""
-]
-aptPkgs = ["wget", "curl", "nodejs", "npm"]
+[setup]
+aptPkgs = ["wget", "curl", "ca-certificates"]
 
-[phases.build]
+[build]
 commands = [
   "npm install"
 ]
