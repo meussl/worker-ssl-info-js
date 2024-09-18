@@ -103,7 +103,7 @@ const sslChecker = (host, options = {}) =>
                     };
 
                     const sslInfo = {
-                        commonName: issuer.CN,
+                        commonName: subject.CN,
                         subject: subject,
                         daysRemaining: getDaysRemaining(new Date(), validTo),
                         valid: res.socket.authorized || false,
