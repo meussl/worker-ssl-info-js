@@ -9,11 +9,10 @@
   },
   "dependencies": {
     "@fidm/x509": "^1.2.1",
-    "dns": "^0.2.2",
     "express": "^4.17.1"
   },
   "engines": {
-    "node": "v20.17"
+    "node": "20.17"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

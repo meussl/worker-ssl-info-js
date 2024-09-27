@@ -3,7 +3,7 @@ const sslChecker = require('./sslChecker'); // Correctly import the sslChecker f
 const issuers = require('./issuers'); // Import the issuers data
 const app = express();
 const getRootCertificates = require("./getRootCertificates");
-const dns = require('dns');
+const dns = require('node:dns');
 
 app.get('/ssl-info', async (req, res) => { // Make the handler function async
     const domain = req.query.domain;
