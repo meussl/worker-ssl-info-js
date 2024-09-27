@@ -8,6 +8,10 @@ const getDaysBetween = (validFrom, validTo) =>
     Math.round(Math.abs(+validFrom - +validTo) / 8.64e7);
 
 const getDaysRemaining = (validFrom, validTo) => {
+    if (!validFrom || !validTo) {
+        return 0;
+    }
+
     const daysRemaining = getDaysBetween(validFrom, validTo);
 
     if (new Date(validTo).getTime() < new Date().getTime()) {
@@ -26,7 +30,7 @@ const DEFAULT_OPTIONS = {
     rejectUnauthorized: false,
     validateSubjectAltName: true,
     headers: {
-        "User-Agent": "MeuSSL Bot 1.0",
+        "User-Agent": "MeuSSLBot/1.0",
     }
 };
 
@@ -96,10 +100,10 @@ const sslChecker = (host, options = {}) =>
                     const issuerInfo = {
                         commonName: issuer.CN,
                         organization: issuer.O,
-                        organizationalUnit: issuer.OU,
-                        locality: issuer.L,
-                        state: issuer.ST,
-                        country: issuer.C
+                        organizationalUnit: issuer.OU || null,
+                        locality: issuer.L  || null,
+                        state: issuer.ST || null,
+                        country: issuer.C || null,
                     };
 
                     const sslInfo = {
@@ -107,11 +111,11 @@ const sslChecker = (host, options = {}) =>
                         subject: subject,
                         daysRemaining: getDaysRemaining(new Date(), validTo),
                         valid: res.socket.authorized || false,
-                        validFrom: new Date(valid_from).toISOString(),
-                        validTo: validTo.toISOString(),
-                        validFor,
-                        fingerprint256: fingerprint256,
-                        serialNumber: serialNumber
+                        validFrom: new Date(valid_from).toISOString() || null,
+                        validTo: validTo.toISOString() || null,
+                        validFor: validFor || [],
+                        fingerprint256: fingerprint256 || null,
+                        serialNumber: serialNumber || null,
                     };
 
                     resolve({issuer: issuerInfo, ssl: sslInfo});
