@@ -1,5 +1,5 @@
-const http = require("http");
-const https = require("https");
+const http = require("node:http");
+const https = require("node:https");
 
 const checkPort = (port) =>
     !isNaN(parseFloat(port)) && Math.sign(port) === 1;
