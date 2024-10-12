@@ -68,7 +68,7 @@ const sslChecker = (host, options = {}) =>
         options = Object.assign({}, DEFAULT_OPTIONS, options);
 
         if (!checkPort(options.port)) {
-            reject(Error("Invalid port"));
+            reject(new Error("Invalid port: Port must be a positive number"));
             return;
         }
 
@@ -88,7 +88,7 @@ const sslChecker = (host, options = {}) =>
                     res.socket.destroy();
 
                     if (!valid_from || !valid_to || !subjectaltname) {
-                        reject(new Error("No certificate"));
+                        reject(new Error("No certificate: Missing required certificate fields"));
                         return;
                     }
 
@@ -122,14 +122,16 @@ const sslChecker = (host, options = {}) =>
                 }
             );
 
-            req.on("error", reject);
+            req.on("error", (err) => {
+                reject(new Error(`Request error: ${err.message}`));
+            });
             req.on("timeout", () => {
                 req.destroy();
-                reject(new Error("Timed Out"));
+                reject(new Error("Request timed out"));
             });
             req.end();
         } catch (e) {
-            reject(e);
+            reject(new Error(`Unexpected error: ${e.message}`));
         }
     });
 
